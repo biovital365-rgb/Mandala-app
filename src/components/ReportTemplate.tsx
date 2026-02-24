@@ -14,68 +14,64 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
     const pageStyle = "w-[210mm] h-[297mm] bg-[#050505] text-white p-16 flex flex-col relative overflow-hidden";
 
     return (
-        <div id="pdf-report-template" style={{ display: 'none' }}>
+        <div id="pdf-report-parent" className="bg-[#050505] p-0 m-0">
             {/* PAGE 1: COVER */}
             <div id="pdf-page-cover" className={pageStyle}>
-                {/* Background Decor */}
-                <div className="absolute top-[-10%] left-[-10%] w-[120%] h-[120%] opacity-20 pointer-events-none">
-                    <img
-                        src="https://images.unsplash.com/photo-1502134249126-9f3755a50d78?auto=format&fit=crop&q=80&w=2000"
-                        className="w-full h-full object-cover blur-sm"
-                        alt="cosmos"
-                    />
+                {/* CSS Based Cosmos Background */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                    <div className="absolute top-[20%] left-[10%] w-[80%] h-[60%] bg-[#7f13ec]/20 rounded-full blur-[120px]"></div>
+                    <div className="absolute bottom-[10%] right-[10%] w-[70%] h-[50%] bg-[#ebb305]/10 rounded-full blur-[100px]"></div>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#050505_100%)]"></div>
                 </div>
-                <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black"></div>
 
                 <div className="relative z-10 flex flex-col h-full items-center justify-center text-center">
-                    <div className="w-32 h-32 mb-8 rounded-full bg-gradient-to-tr from-[#7f13ec] to-[#ffd700] p-1 shadow-[0_0_50px_rgba(127,19,236,0.5)]">
-                        <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                            <Sparkles className="w-16 h-16 text-[#ffd700]" />
+                    <div className="w-32 h-32 mb-10 rounded-[2.5rem] bg-gradient-to-tr from-[#db2777] to-[#ebb305] p-1 shadow-[0_20px_50px_rgba(219,39,119,0.3)]">
+                        <div className="w-full h-full rounded-[2.3rem] bg-black flex items-center justify-center">
+                            <Sparkles className="w-16 h-16 text-[#ebb305] drop-shadow-[0_0_10px_rgba(235,179,5,0.6)]" />
                         </div>
                     </div>
 
-                    <h1 className="text-6xl font-bold tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white via-[#ffd700] to-white">
-                        Mandala Numérico
+                    <h1 className="text-6xl font-black tracking-tighter mb-4 text-white">
+                        BioVital <span className="text-[#db2777]">365</span>
                     </h1>
-                    <div className="w-48 h-1 bg-gradient-to-r from-transparent via-[#ffd700] to-transparent mb-12"></div>
+                    <div className="w-48 h-1 bg-gradient-to-r from-transparent via-[#ebb305] to-transparent mb-12"></div>
 
-                    <h3 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-[#ffd700] mb-4">
+                    <h3 className="text-4xl font-bold text-white mb-2">
                         {results.name}
                     </h3>
-                    <p className="text-slate-400 text-lg">
-                        Fecha de Nacimiento: {(() => {
-                            const [y, m, d] = results.dob.split('-').map(Number);
-                            return `${d}/${m}/${y}`;
-                        })()}
+                    <p className="text-slate-500 text-lg font-medium tracking-widest uppercase mb-12">
+                        Mapa Mandala Numérico
                     </p>
+
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                        <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">
+                            Nacimiento: {(() => {
+                                const [y, m, d] = results.dob.split('-').map(Number);
+                                return `${d}/${m}/${y}`;
+                            })()}
+                        </p>
+                    </div>
                 </div>
 
-                <div className="space-y-4 mb-20">
-                    <p className="text-slate-400 uppercase tracking-[0.5em] text-sm">Estudio Evolutivo Transpersonal</p>
-                    <h2 className="text-4xl font-light text-white tracking-widest">
-                        {results.name.toUpperCase()}
-                    </h2>
-                </div>
-
-                <div className="mt-auto grid grid-cols-2 gap-12 w-full border-t border-white/10 pt-12">
+                <div className="absolute bottom-16 left-16 right-16 flex justify-between items-end pt-12 border-t border-white/10">
                     <div className="text-left">
-                        <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">Preparado por</p>
-                        <p className="text-[#ffd700] font-bold">BioVital 365 AI</p>
+                        <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] mb-1">Tecnología de Análisis</p>
+                        <p className="text-[#ebb305] font-black tracking-widest text-sm">BIOVITAL AI ENGINE v2.5</p>
                     </div>
                     <div className="text-right">
-                        <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">Fecha de Emisión</p>
-                        <p className="text-white font-medium">{new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                        <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] mb-1">Emisión Sagrada</p>
+                        <p className="text-white font-bold">{new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
                     </div>
                 </div>
             </div>
 
             {/* PILLAR PAGES */}
             {[
-                { id: 'pdf-page-esencia', icon: Heart, label: 'Esencia (Alma)', value: results.essence, key: 'esencia', color: '#ec13e0' },
-                { id: 'pdf-page-mision', icon: Mountain, label: 'Misión de Vida', value: results.lifePath, key: 'mision', color: '#13ec93' },
-                { id: 'pdf-page-nombre', icon: Badge, label: 'Vibración del Nombre', value: results.nameVibration, key: 'nombre', color: '#137fec' },
-                { id: 'pdf-page-ano', icon: Calendar, label: 'Año Personal', value: results.personalYear, key: 'ano', color: '#ec7f13' },
-                { id: 'pdf-page-regalo', icon: Gift, label: 'Regalo Divino', value: results.divineGift, key: 'regalo', color: '#ffd700' }
+                { id: 'pdf-page-esencia', icon: Heart, label: 'Esencia (Alma)', value: results.essence, key: 'esencia', color: '#db2777' },
+                { id: 'pdf-page-mision', icon: Mountain, label: 'Misión de Vida', value: results.lifePath, key: 'mision', color: '#ebb305' },
+                { id: 'pdf-page-nombre', icon: Badge, label: 'Vibración del Nombre', value: results.nameVibration, key: 'nombre', color: '#06b6d4' },
+                { id: 'pdf-page-ano', icon: Calendar, label: 'Año Personal', value: results.personalYear, key: 'ano', color: '#f97316' },
+                { id: 'pdf-page-regalo', icon: Gift, label: 'Regalo Divino', value: results.divineGift, key: 'regalo', color: '#84cc16' }
             ].map((pilar) => {
                 const info = getFullInfo(pilar.key, pilar.value);
                 const calc = getCalculationSteps(pilar.key, results);
@@ -107,7 +103,7 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
 
                         <div className="grid grid-cols-1 gap-12 mb-12">
                             <section className="space-y-4">
-                                <div className="flex items-center gap-2 text-[#ffd700] text-xs font-bold uppercase tracking-widest">
+                                <div className="flex items-center gap-2 text-[#ebb305] text-xs font-bold uppercase tracking-widest">
                                     <Zap className="w-4 h-4" /> La Energía del {pilar.value}
                                 </div>
                                 <p className="text-lg text-slate-300 leading-relaxed font-light first-letter:text-4xl first-letter:font-bold first-letter:mr-2">
@@ -116,8 +112,8 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
                             </section>
 
                             <section className="space-y-4 p-8 rounded-3xl bg-gradient-to-br from-white/[0.03] to-transparent border border-white/10">
-                                <div className="flex items-center gap-2 text-[#7f13ec] text-xs font-bold uppercase tracking-widest">
-                                    <Compass className="w-4 h-4" /> Integración Personalizada
+                                <div className="flex items-center gap-2 text-[#06b6d4] text-xs font-bold uppercase tracking-widest">
+                                    <Sparkles className="w-4 h-4" /> Integración Sagrada
                                 </div>
                                 <p className="text-base text-slate-400 leading-relaxed italic">
                                     "{info.pillarNuance}"
@@ -158,28 +154,28 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
             {/* PAGE 7: SYNTHESIS */}
             <div id="pdf-page-synthesis" className={pageStyle}>
                 <div className="flex items-center gap-4 mb-20">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#7f13ec] to-[#ffd700] flex items-center justify-center">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-[#db2777] to-[#ebb305] flex items-center justify-center shadow-lg">
                         <Target className="w-8 h-8 text-black" />
                     </div>
                     <div>
-                        <h2 className="text-3xl font-bold tracking-tight">Síntesis Armónica</h2>
-                        <p className="text-slate-500 text-xs uppercase tracking-[0.3em]">Integración de tu Mapa de Destino</p>
+                        <h2 className="text-3xl font-black tracking-tight text-white">Síntesis Armónica</h2>
+                        <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] font-bold">Integración de tu Mapa de Destino</p>
                     </div>
                 </div>
 
                 <div className="space-y-16 flex-1">
                     <section className="relative">
-                        <div className="absolute -left-12 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ffd700] to-transparent"></div>
-                        <h4 className="text-[#ffd700] text-sm font-bold uppercase tracking-widest mb-6 flex items-center gap-3">
-                            <Star className="w-5 h-5" /> Tu Camino de Maestría
+                        <div className="absolute -left-12 top-0 bottom-0 w-1 bg-gradient-to-b from-[#ebb305] to-transparent"></div>
+                        <h4 className="text-[#ebb305] text-xs font-black uppercase tracking-widest mb-6 flex items-center gap-3">
+                            <Star className="w-5 h-5 drop-shadow-[0_0_8px_rgba(235,179,5,0.4)]" /> Tu Camino de Maestría
                         </h4>
                         <p className="text-2xl text-slate-200 leading-[1.6] font-light">
                             {getMapSynthesis(results)}
                         </p>
                     </section>
 
-                    <section className="grid grid-cols-1 gap-8 opacity-60">
-                        <div className="p-8 rounded-3xl border border-white/5 bg-white/[0.01]">
+                    <section className="grid grid-cols-1 gap-8 opacity-70">
+                        <div className="p-8 rounded-[2rem] border border-white/10 bg-white/[0.02] backdrop-blur-sm">
                             <p className="text-xs text-slate-400 leading-relaxed italic">
                                 "La numerología no es destino, sino una herramienta de navegación. Tu voluntad soberana es el capitán de este viaje. Este informe es un espejo de tus potencialidades divinas puestas en la tierra."
                             </p>
@@ -188,8 +184,8 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
                 </div>
 
                 <div className="mt-auto flex flex-col items-center gap-6 pt-12 border-t border-white/10">
-                    <Sparkles className="text-[#7f13ec] w-10 h-10 opacity-40" />
-                    <p className="text-slate-500 text-[10px] uppercase tracking-[0.5em] font-light">
+                    <Sparkles className="text-[#db2777] w-10 h-10 opacity-60 animate-pulse" />
+                    <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em]">
                         BioVital 365 • Mandala de Transformación • 2025
                     </p>
                 </div>

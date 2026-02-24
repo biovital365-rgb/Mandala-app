@@ -36,82 +36,112 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
       regalo: "Regalo Divino"
     };
 
+    const colorMap: Record<string, string> = {
+      esencia: '#db2777', // Magenta
+      mision: '#ebb305',  // Gold
+      nombre: '#06b6d4',  // Cyan
+      ano: '#f97316',     // Orange
+      regalo: '#84cc16'   // Green
+    };
+
+    const currentColor = colorMap[pillar] || '#db2777';
+
     return {
       title: titles[pillar] || "Análisis",
       number: numberMap[pillar] || "?",
       subtitle: interpretation.subtitle,
       desc: interpretation.desc,
-      essence: interpretation.essence, // El texto largo de 100+ palabras
-      pillarNuance: interpretation.pillarNuance, // El matiz corto del pilar
+      essence: interpretation.essence,
+      pillarNuance: interpretation.pillarNuance,
       challenges: interpretation.challenges,
       giftText: interpretation.gift,
       calc: results.dob ? formatDate(results.dob) : "--/--/----",
       calcSteps: getCalculationSteps(pillar, results),
-      color: pillar === 'mision' ? 'accent' : 'primary',
+      color: currentColor,
       icon: <Sparkles className="w-5 h-5" />
     };
   })();
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col max-w-md mx-auto overflow-hidden bg-[#050214] shadow-2xl">
-      <div className="absolute inset-0 bg-gradient-to-b from-[#090518] via-[#110a2e] to-[#050214] pointer-events-none z-0"></div>
+    <div className="relative flex min-h-screen w-full flex-col max-w-md mx-auto overflow-hidden bg-[#050505] shadow-2xl">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#090518] via-[#050505] to-[#010102] pointer-events-none z-0"></div>
 
       {/* Background effects */}
-      <div className="absolute top-[-10%] left-[-10%] right-[-10%] h-[600px] bg-[radial-gradient(circle_at_50%_40%,rgba(134,25,143,0.25),transparent_70%)] pointer-events-none z-0"></div>
-      <div className="absolute -top-[50px] -right-[50px] w-[250px] h-[250px] bg-[#d946ef]/10 rounded-full blur-[80px] pointer-events-none z-0"></div>
+      <div
+        className="absolute top-[-10%] left-[-10%] right-[-10%] h-[500px] pointer-events-none z-0 opacity-40"
+        style={{ background: `radial-gradient(circle at 50% 40%, ${data.color}40, transparent 70%)` }}
+      ></div>
+      <div
+        className="absolute -top-[50px] -right-[50px] w-[200px] h-[200px] rounded-full blur-[100px] pointer-events-none z-0 opacity-30"
+        style={{ backgroundColor: data.color }}
+      ></div>
 
-      <header className="sticky top-0 z-50 flex items-center justify-between p-4 bg-[#050214]/70 backdrop-blur-xl border-b border-white/5">
-        <button onClick={onBack} aria-label="Volver" className="flex w-10 h-10 items-center justify-center rounded-full hover:bg-white/5 transition-colors text-slate-200">
+      <header className="sticky top-0 z-50 flex items-center justify-between p-5 bg-black/60 backdrop-blur-2xl border-b border-white/5">
+        <button onClick={onBack} aria-label="Volver" className="flex w-10 h-10 items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 transition-all text-white border border-white/5">
           <ChevronLeft className="w-6 h-6" />
         </button>
-        <h2 className="text-xs uppercase tracking-[0.2em] font-bold text-[#ffd700]/80">{data.title}</h2>
-        <button aria-label="Compartir" className="flex w-10 h-10 items-center justify-center rounded-full hover:bg-white/5 transition-colors text-slate-200">
-          <Share className="w-5 h-5" />
-        </button>
+        <h2 className="text-[10px] uppercase tracking-[0.3em] font-black text-white/60">{data.title}</h2>
+        <div className="w-10 h-10"></div>
       </header>
 
-      <main className="flex-1 flex flex-col relative z-10 pb-28">
-        <section className="relative flex flex-col items-center justify-center pt-10 pb-12 px-6">
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="w-[360px] h-[360px] rounded-full border border-[#d946ef]/10 animate-[spin_60s_linear_infinite] flex items-center justify-center opacity-40">
-              <div className="w-[320px] h-[320px] rounded-full border border-dashed border-[#ffd700]/20"></div>
-            </div>
+      <main className="flex-1 flex flex-col relative z-10 pb-32">
+        <section className="relative flex flex-col items-center justify-center pt-8 pb-10 px-6">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
+            <div
+              className="w-[400px] h-[400px] rounded-full border animate-[spin_60s_linear_infinite] opacity-10"
+              style={{ borderColor: data.color }}
+            ></div>
+            <div
+              className="absolute w-[300px] h-[300px] rounded-full border border-dashed animate-[spin_40s_linear_infinite_reverse] opacity-20"
+              style={{ borderColor: data.color }}
+            ></div>
           </div>
 
-          <div className="relative z-10 mb-4">
-            <h1 className="text-[130px] font-bold leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-[#fffce6] via-[#ffd700] to-[#d4af37] drop-shadow-[0_0_35px_rgba(255,215,0,0.3)]">
+          <div className="relative z-10 mb-4 flex items-center justify-center">
+            <h1
+              className="text-[150px] font-black leading-none tracking-tighter text-white drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]"
+              style={{ textShadow: `0 0 40px ${data.color}80` }}
+            >
               {data.number}
             </h1>
           </div>
 
-          <div className="text-center relative z-10 space-y-3 px-4">
-            <h2 className="text-2xl font-bold text-white tracking-tight drop-shadow-md">{data.subtitle}</h2>
-            <p className="text-slate-300 text-sm font-medium leading-relaxed max-w-[280px] mx-auto opacity-90">
+          <div className="text-center relative z-10 space-y-4 px-6">
+            <h2 className="text-3xl font-black text-white tracking-tight drop-shadow-2xl">{data.subtitle}</h2>
+            <p className="text-slate-300 text-base font-medium leading-relaxed max-w-[300px] mx-auto opacity-80">
               {data.desc}
             </p>
           </div>
         </section>
 
-        <section className="px-4 mb-6">
-          <div className="glass-panel rounded-2xl p-5 border-l-2 border-l-[#ffd700] shadow-[0_4px_20px_rgba(0,0,0,0.2)]">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-1.5 rounded-lg bg-white/5">
-                <Calculator className="w-5 h-5 text-[#ffd700]" />
+        <section className="px-5 mb-8">
+          <div className="glass-panel rounded-3xl p-6 border border-white/10 shadow-2xl relative overflow-hidden">
+            <div
+              className="absolute top-0 left-0 w-1.5 h-full opacity-70"
+              style={{ backgroundColor: data.color }}
+            ></div>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="p-2 rounded-xl bg-white/5 border border-white/10">
+                <Calculator className="w-5 h-5 text-white/60" />
               </div>
-              <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Cálculo de Nacimiento</h3>
+              <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Cálculo Vibracional</h3>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <div className="flex justify-between items-center text-sm text-slate-400">
-                <span className="font-medium">Fecha</span>
-                <span className="font-mono text-slate-200 tracking-wider">{data.calc}</span>
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Nacimiento</span>
+                <span className="font-mono text-white text-lg font-bold tracking-widest">{data.calc}</span>
               </div>
-              <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent w-full"></div>
-              <div className="flex justify-between items-center pt-1">
-                <span className="text-sm font-medium text-slate-400">Reducción</span>
-                <div className="flex items-center gap-3 font-mono text-lg font-bold text-white">
-                  <span className="text-slate-300">{data.calcSteps}</span>
-                  <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#ffd700] to-[#b49b38] text-xl drop-shadow-[0_0_10px_rgba(255,215,0,0.4)]">
+              <div className="h-px bg-white/5 w-full"></div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Reducción</span>
+                <div className="flex items-center gap-4">
+                  <span className="font-mono text-slate-400 font-bold">{data.calcSteps}</span>
+                  <div className="w-px h-6 bg-white/10"></div>
+                  <span
+                    className="text-2xl font-black italic drop-shadow-glow"
+                    style={{ color: data.color }}
+                  >
                     {data.number}
                   </span>
                 </div>
@@ -120,46 +150,56 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
           </div>
         </section>
 
-        <section className="px-4 space-y-4">
-          <details className="group glass-panel rounded-xl overflow-hidden transition-all duration-300 open:bg-[rgba(255,255,255,0.05)] open:border-[#d946ef]/30" open>
-            <summary className="flex cursor-pointer items-center justify-between p-5 list-none select-none">
+        <section className="px-5 space-y-5">
+          {/* Significado accordion */}
+          <details className="group glass-panel rounded-3xl overflow-hidden border border-white/5 transition-all duration-500 open:border-white/15" open>
+            <summary className="flex cursor-pointer items-center justify-between p-6 list-none group-open:bg-white/5">
               <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#d946ef]/10 text-[#d946ef] border border-[#d946ef]/20 shadow-[0_0_15px_rgba(217,70,239,0.15)]">
-                  <Sparkles className="w-5 h-5" />
+                <div
+                  className="flex items-center justify-center w-12 h-12 rounded-2xl border bg-opacity-10"
+                  style={{ backgroundColor: `${data.color}15`, borderColor: `${data.color}30`, color: data.color }}
+                >
+                  <Sparkles className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">{data.title === "Esencia (Alma)" ? "Vibración de Esencia" : `Naturaleza de ${data.title}`}</h3>
+                <div>
+                  <h3 className="font-black text-white tracking-wide text-base uppercase tracking-widest">Sabiduría</h3>
+                </div>
               </div>
-              <ChevronDown className="w-5 h-5 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:text-[#d946ef]" />
+              <ChevronDown className="w-6 h-6 text-slate-500 transition-transform duration-500 group-open:rotate-180" />
             </summary>
-            <div className="px-5 pb-6 pt-1">
-              <div className="w-full h-px bg-white/5 mb-4"></div>
-              <div className="space-y-4 text-slate-300 text-sm leading-7 font-light">
-                <p className="border-l-2 border-[#d946ef]/40 pl-4 py-1 bg-white/5 rounded-r-lg">
+            <div className="px-6 pb-8 pt-2">
+              <div className="w-full h-px bg-white/5 mb-6"></div>
+              <div className="space-y-5 text-slate-300 text-base leading-[1.8] font-medium">
+                <p
+                  className="pl-5 border-l-2 py-3 bg-white/5 rounded-r-2xl shadow-inner italic"
+                  style={{ borderLeftColor: data.color }}
+                >
                   {data.pillarNuance}
                 </p>
-                <p>
+                <p className="opacity-90">
                   {data.essence}
                 </p>
               </div>
             </div>
           </details>
 
-          <details className="group glass-panel rounded-xl overflow-hidden transition-all duration-300 open:bg-[rgba(255,255,255,0.05)] open:border-red-400/30">
-            <summary className="flex cursor-pointer items-center justify-between p-5 list-none select-none">
+          {/* Sombra accordion */}
+          <details className="group glass-panel rounded-3xl overflow-hidden border border-white/5 transition-all duration-500 open:border-red-500/20">
+            <summary className="flex cursor-pointer items-center justify-between p-6 list-none group-open:bg-red-500/5">
               <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
-                  <Zap className="w-5 h-5" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-2xl border border-red-500/20 bg-red-500/10 text-red-400">
+                  <Zap className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">Desafíos del Número {data.number}</h3>
+                <h3 className="font-black text-white tracking-wide text-base uppercase tracking-widest">Desafíos</h3>
               </div>
-              <ChevronDown className="w-5 h-5 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:text-red-400" />
+              <ChevronDown className="w-6 h-6 text-slate-500 transition-transform duration-500 group-open:rotate-180" />
             </summary>
-            <div className="px-5 pb-6 pt-1">
-              <div className="w-full h-px bg-white/5 mb-4"></div>
-              <ul className="space-y-4">
+            <div className="px-6 pb-8 pt-2">
+              <div className="w-full h-px bg-white/5 mb-6"></div>
+              <ul className="space-y-5">
                 {data.challenges.map((challenge: string, i: number) => (
-                  <li key={i} className="flex gap-3 text-sm text-slate-300 leading-relaxed">
-                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] flex-shrink-0"></span>
+                  <li key={i} className="flex gap-4 text-base text-slate-300 leading-relaxed font-medium">
+                    <div className="mt-2 h-2 w-2 rounded-full bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.6)] shrink-0"></div>
                     <span>{challenge}</span>
                   </li>
                 ))}
@@ -167,23 +207,30 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
             </div>
           </details>
 
-          <details className="group glass-panel rounded-xl overflow-hidden transition-all duration-300 open:bg-[rgba(255,255,255,0.05)] open:border-[#ffd700]/30">
-            <summary className="flex cursor-pointer items-center justify-between p-5 list-none select-none">
+          {/* Regalo accordion */}
+          <details className="group glass-panel rounded-3xl overflow-hidden border border-white/5 transition-all duration-500 open:border-green/20">
+            <summary className="flex cursor-pointer items-center justify-between p-6 list-none group-open:bg-green/5">
               <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#ffd700]/10 text-[#ffd700] border border-[#ffd700]/20 shadow-[0_0_15px_rgba(255,215,0,0.15)]">
-                  <Gift className="w-5 h-5" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-2xl border border-green/20 bg-green/10 text-green">
+                  <Gift className="w-6 h-6" />
                 </div>
-                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">El Regalo Divino</h3>
+                <h3 className="font-black text-white tracking-wide text-base uppercase tracking-widest">Dones</h3>
               </div>
-              <ChevronDown className="w-5 h-5 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:text-[#ffd700]" />
+              <ChevronDown className="w-6 h-6 text-slate-500 transition-transform duration-500 group-open:rotate-180" />
             </summary>
-            <div className="px-5 pb-6 pt-1">
-              <div className="w-full h-px bg-white/5 mb-4"></div>
-              <div className="bg-gradient-to-r from-[#ffd700]/10 to-transparent p-4 rounded-lg border border-[#ffd700]/20 mb-4 shadow-[inset_0_0_20px_rgba(255,215,0,0.05)]">
-                <p className="text-[#ffd700] text-xs font-bold uppercase tracking-widest mb-1.5 opacity-90">Dones Desbloqueados</p>
-                <p className="text-white text-[15px] font-semibold tracking-wide">{data.giftText}</p>
+            <div className="px-6 pb-8 pt-2">
+              <div className="w-full h-px bg-white/5 mb-6"></div>
+              <div
+                className="p-6 rounded-2xl border border-white/10 mb-5 relative overflow-hidden"
+                style={{ backgroundColor: '#ffffff03' }}
+              >
+                <div
+                  className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                  style={{ background: `radial-gradient(circle at 70% 30%, ${data.color}, transparent 100%)` }}
+                ></div>
+                <p className="text-white text-[17px] font-black tracking-tight leading-snug">{data.giftText}</p>
               </div>
-              <p className="text-slate-300 text-sm leading-7 font-light">
+              <p className="text-slate-400 text-sm leading-relaxed font-medium opacity-80">
                 Al integrar tu sombra, accedes a una capacidad única para manifestar tus talentos. Tu vibración se convierte en un puente entre tus ideales y la realidad física.
               </p>
             </div>
@@ -191,16 +238,19 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
         </section>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-[#050214] via-[#050214]/95 to-transparent z-50 flex flex-col gap-3 max-w-md mx-auto">
-        <button className="w-full h-14 rounded-xl bg-gradient-to-r from-[#86198f] to-[#d946ef] hover:to-[#f0abfc] active:scale-[0.98] transition-all text-white font-bold flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(217,70,239,0.4)] border border-white/10">
-          <Share className="w-5 h-5" />
-          Compartir Interpretación
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#050505] via-[#050505] to-transparent z-50 flex flex-col gap-4 max-w-md mx-auto">
+        <button
+          className="w-full h-16 rounded-2xl text-white font-black text-lg flex items-center justify-center gap-3 shadow-2xl transition-all transform active:scale-95 border border-white/20"
+          style={{ background: `linear-gradient(135deg, ${data.color}, ${data.color}dd)`, boxShadow: `0 15px 40px ${data.color}30` }}
+        >
+          <Share className="w-6 h-6" />
+          <span className="uppercase tracking-widest">Compartir Guía</span>
         </button>
         <button
           onClick={onBack}
-          className="w-full py-2 text-sm text-slate-400 font-medium hover:text-white transition-colors tracking-wide"
+          className="w-full py-2 text-xs text-slate-500 font-black uppercase tracking-[0.3em] hover:text-white transition-colors"
         >
-          Explorar otros pilares
+          Explorar Otros Pilares
         </button>
       </div>
     </div>

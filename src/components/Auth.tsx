@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, User, Lock, ArrowRight, Sparkles } from 'lucide-react';
+import { Mail, User, Lock, ArrowRight, Sparkles, Zap, User as UserIcon } from 'lucide-react';
 import { motion } from 'motion/react';
 import { supabase } from '../lib/supabase';
 
@@ -54,102 +54,123 @@ export function Auth({ onAuthSuccess, onBack }: AuthProps) {
     };
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col w-full max-w-md mx-auto p-6 "
-        >
-            <div className="flex items-center gap-2 mb-8 justify-center">
-                <Sparkles className="text-primary w-6 h-6" />
-                <h2 className="text-white text-2xl font-bold tracking-tight">Mandala Numérico</h2>
-            </div>
+        <div className="min-h-screen w-full flex items-center justify-center p-6 bg-[#050505] relative overflow-hidden">
+            {/* Background effects */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-magenta/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
+            <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-cyan/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
 
-            <div className="glass-panel rounded-3xl p-8 border border-primary/20 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10"></div>
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="flex flex-col w-full max-w-sm relative z-10"
+            >
+                <div className="relative mb-10 text-center">
+                    <div className="flex justify-center mb-6">
+                        <div className="p-5 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl relative group overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-magenta/20 to-cyan/20 animate-pulse"></div>
+                            <Sparkles className="w-12 h-12 text-gold relative z-10 drop-shadow-[0_0_15px_rgba(235,179,5,0.6)]" />
+                        </div>
+                    </div>
+                    <h2 className="text-4xl font-black text-white tracking-tight leading-tight">
+                        {isLogin ? 'Bienvenido a tu' : 'Inicia tu'} <br />
+                        <span className="text-magenta">Frecuencia</span>
+                    </h2>
+                    <p className="text-slate-400 mt-3 text-base font-medium">
+                        {isLogin ? 'Accede a tu portal sagrado' : 'Crea tu perfil vibracional'}
+                    </p>
+                </div>
 
-                <h3 className="text-2xl font-bold text-white mb-2">
-                    {isLogin ? 'Bienvenido de vuelta' : 'Crea tu cuenta'}
-                </h3>
-                <p className="text-slate-400 text-sm mb-8">
-                    {isLogin ? 'Ingresa tu correo para continuar' : 'Únete para guardar tu mapa sagrado'}
-                </p>
+                <div className="glass-panel p-8 rounded-[2rem] border-white/10 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)]">
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                        {!isLogin && (
+                            <div className="space-y-2">
+                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Nombre Completo</label>
+                                <div className="relative group">
+                                    <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-magenta transition-colors" />
+                                    <input
+                                        type="text"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        className="w-full bg-black/40 border border-white/5 focus:border-magenta/50 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:ring-4 focus:ring-magenta/10 transition-all text-base"
+                                        placeholder="Tu nombre sagrado"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                        )}
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                    {!isLogin && (
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Nombre Completo</label>
-                            <div className="relative">
-                                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Correo Electrónico</label>
+                            <div className="relative group">
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-cyan transition-colors" />
                                 <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="Ej. Juan Pérez"
-                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="w-full bg-black/40 border border-white/5 focus:border-cyan/50 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:ring-4 focus:ring-cyan/10 transition-all text-base"
+                                    placeholder="vincular@corazon.com"
                                     required
                                 />
                             </div>
                         </div>
-                    )}
 
-                    <div className="flex flex-col gap-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Email</label>
-                        <div className="relative">
-                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="tu@email.com"
-                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition"
-                                required
-                            />
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Contraseña</label>
+                            <div className="relative group">
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-gold transition-colors" />
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    className="w-full bg-black/40 border border-white/5 focus:border-gold/50 rounded-2xl py-4 pl-12 pr-4 text-white placeholder-slate-600 focus:outline-none focus:ring-4 focus:ring-gold/10 transition-all text-base"
+                                    placeholder="••••••••"
+                                    required
+                                />
+                            </div>
                         </div>
+
+                        {error && (
+                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 text-xs py-3 px-4 rounded-xl flex items-center gap-3 animate-shake font-bold">
+                                <Zap className="w-4 h-4" />
+                                {error}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-magenta to-cyan hover:from-pink-500 hover:to-blue-400 text-white font-black py-4.5 rounded-2xl shadow-xl transition-all transform active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 text-lg uppercase tracking-widest mt-4"
+                        >
+                            {loading ? (
+                                <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                            ) : (
+                                <>
+                                    <span>{isLogin ? 'Entrar' : 'Revelar mi Mapa'}</span>
+                                    <ArrowRight className="w-6 h-6" />
+                                </>
+                            )}
+                        </button>
+                    </form>
+
+                    <div className="mt-8 text-center">
+                        <button
+                            onClick={() => setIsLogin(!isLogin)}
+                            className="text-slate-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors py-2"
+                        >
+                            {isLogin ? '¿No tienes cuenta? Regístrate aquí' : '¿Ya tienes cuenta? Inicia sesión'}
+                        </button>
                     </div>
+                </div>
 
-                    <div className="flex flex-col gap-2">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Password</label>
-                        <div className="relative">
-                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••"
-                                className="w-full bg-white/5 border border-white/10 rounded-xl py-4 pl-12 pr-4 text-white focus:border-primary/50 outline-none transition"
-                                required
-                            />
-                        </div>
-                    </div>
-
-                    {error && <p className="text-red-400 text-sm mt-2">{error}</p>}
-
+                <div className="flex justify-center mt-10">
                     <button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full py-4 bg-primary hover:bg-primary/90 text-black font-bold text-lg rounded-xl gold-glow flex items-center justify-center gap-2 transition disabled:opacity-50 mt-4"
+                        onClick={onBack}
+                        className="text-slate-500 hover:text-white transition-all text-xs font-bold uppercase tracking-widest flex items-center gap-2 px-6 py-2 rounded-full border border-white/5 hover:bg-white/5"
                     >
-                        {loading ? 'Procesando...' : (isLogin ? 'Entrar' : 'Registrarse')}
-                        <ArrowRight className="w-5 h-5" />
-                    </button>
-                </form>
-
-                <div className="mt-8 pt-6 border-t border-white/5 text-center">
-                    <button
-                        onClick={() => setIsLogin(!isLogin)}
-                        className="text-slate-400 hover:text-primary transition text-sm"
-                    >
-                        {isLogin ? '¿No tienes cuenta? Regístrate' : '¿Ya tienes cuenta? Inicia sesión'}
+                        <span>Volver al Inicio</span>
                     </button>
                 </div>
-            </div>
-
-            <button
-                onClick={onBack}
-                className="mt-8 text-slate-500 hover:text-white transition text-sm font-medium"
-            >
-                Volver al inicio
-            </button>
-        </motion.div>
+            </motion.div>
+        </div>
     );
 }

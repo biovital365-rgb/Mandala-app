@@ -43,47 +43,82 @@ export function LandingPage({ onStart, onAuthClick, user }: LandingPageProps) {
 
       <main className="flex-grow flex flex-col py-10 px-6 w-full gap-16">
         {/* Hero Section */}
-        <section className="flex flex-col items-center text-center gap-8">
-          <div className="relative w-72 h-72 flex items-center justify-center">
-            {/* Glowing Rings */}
-            <div className="absolute inset-0 rounded-full border border-primary/10 animate-[spin_40s_linear_infinite]"></div>
-            <div className="absolute inset-4 rounded-full border border-dashed border-primary/20 animate-[spin_60s_linear_infinite_reverse]"></div>
+        <div className="relative z-10 w-full max-w-md px-6 flex flex-col items-center text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 p-3 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-xl shadow-2xl relative group"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-magenta to-cyan opacity-0 group-hover:opacity-10 transition-opacity rounded-3xl blur-xl"></div>
+            <Sparkles className="w-10 h-10 text-gold shadow-[0_0_20px_rgba(235,179,5,0.4)]" />
+          </motion.div>
 
-            {/* The Mandala */}
-            <div className="relative w-64 h-64 rounded-full overflow-hidden shadow-[0_0_80px_rgba(212,175,55,0.2)] border border-primary/30">
-              <div
-                className="w-full h-full bg-cover bg-center bg-no-repeat transition-transform duration-1000 hover:scale-110"
-                style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop')"
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
-            </div>
-          </div>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl font-black text-white leading-tight tracking-tighter mb-4"
+          >
+            BioVital <span className="text-magenta">365</span>
+          </motion.h1>
 
-          <div className="flex flex-col gap-4 max-w-sm">
-            <h1 className="text-[44px] font-bold leading-[1.05] tracking-tight bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-              Descubre el Código Sagrado de tu Destino
-            </h1>
-            <p className="text-slate-400 text-base leading-relaxed font-medium px-4">
-              Tu mapa numerológico con precisión kabalística. Decodifica tu frecuencia vibratoria hoy.
-            </p>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="text-slate-400 text-lg font-medium leading-relaxed mb-10 max-w-[280px]"
+          >
+            Decodifica tu frecuencia y activa tu <span className="text-cyan font-bold">misión de vida</span> con el Mapa Mandala.
+          </motion.p>
 
-          <div className="w-full flex flex-col items-center gap-4">
-            <button
+          <div className="w-full space-y-4 mb-16">
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={onStart}
-              className="w-full py-4.5 px-8 bg-primary hover:bg-amber-400 text-black font-black text-lg rounded-2xl gold-glow flex items-center justify-center gap-3 transition transform active:scale-95 shadow-[0_10px_30px_rgba(212,175,55,0.3)]"
+              className="w-full bg-gradient-to-r from-magenta to-gold hover:from-pink-500 hover:to-amber-400 text-white font-black py-4.5 rounded-2xl flex items-center justify-center gap-3 shadow-[0_20px_40px_rgba(219,39,119,0.3)] transition-all transform border border-white/20 text-lg uppercase tracking-widest"
             >
-              <Sparkles className="w-5 h-5" />
-              Calcular Mi Mapa Gratis
-            </button>
-            <div className="flex items-center justify-center gap-2 text-[10px] text-slate-500 uppercase tracking-widest font-bold">
-              <Lock className="w-3 h-3 opacity-60" />
-              <span>Pagos seguros con Stripe y encriptación SSL</span>
+              <Zap className="w-6 h-6" />
+              Empezar Análisis
+            </motion.button>
+
+            {!user && (
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={onAuthClick}
+                className="w-full bg-white/5 hover:bg-white/10 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 transition-all border border-white/10 backdrop-blur-md"
+              >
+                Iniciar sesión / Registrarse
+              </motion.button>
+            )}
+
+            {user && (
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md flex items-center gap-4 text-left">
+                <div className="w-12 h-12 rounded-full bg-magenta/20 flex items-center justify-center text-magenta font-black text-xl border border-magenta/20 shadow-glow">
+                  {user.email?.[0].toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-slate-400 text-xs font-black uppercase tracking-widest">Conectado como</p>
+                  <p className="text-white font-bold">{user.email}</p>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Floating Pillars Preview */}
+          <div className="grid grid-cols-2 gap-4 w-full opacity-60 pointer-events-none scale-90 grayscale-[0.2]">
+            <div className="glass-panel p-4 rounded-2xl border-magenta/20 flex flex-col items-center gap-2">
+              <Heart className="w-6 h-6 text-magenta" />
+              <span className="text-[10px] text-white font-black uppercase tracking-widest">Esencia</span>
+            </div>
+            <div className="glass-panel p-4 rounded-2xl border-gold/20 flex flex-col items-center gap-2">
+              <Mountain className="w-6 h-6 text-gold" />
+              <span className="text-[10px] text-white font-black uppercase tracking-widest">Misión</span>
             </div>
           </div>
-        </section>
+        </div>
+
 
         {/* Trust Section */}
         <section className="border-y border-white/5 py-8">

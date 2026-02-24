@@ -96,38 +96,44 @@ export default function App() {
     if (!reportElement || !results) return;
 
     try {
-      // Mostrar temporalmente para la captura
+      console.log("Generando PDF...");
+      // Forzar visibilidad para la captura pero mantener fuera de pantalla
       reportElement.style.display = 'block';
       reportElement.style.position = 'fixed';
       reportElement.style.left = '-10000px';
+      reportElement.style.top = '0';
 
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageIds = ['pdf-page-cover', 'pdf-page-esencia', 'pdf-page-mision', 'pdf-page-nombre', 'pdf-page-ano', 'pdf-page-regalo', 'pdf-page-synthesis'];
 
       for (let i = 0; i < pageIds.length; i++) {
         const pageElement = document.getElementById(pageIds[i]);
-        if (!pageElement) continue;
+        if (!pageElement) {
+          console.warn(`Página no encontrada: ${pageIds[i]}`);
+          continue;
+        }
 
-        // Pequeño delay por cada página para asegurar renderizado
-        await new Promise(resolve => setTimeout(resolve, 300));
+        // Delay para asegurar que los estilos (especialmente gradientes y glassmorphism) se apliquen
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         const dataUrl = await toPng(pageElement, {
-          quality: 1,
-          pixelRatio: 2,
-          backgroundColor: '#050505'
+          quality: 0.95,
+          pixelRatio: 1.5,
+          backgroundColor: '#050505',
+          cacheBust: true,
+          skipFonts: false
         });
 
         if (i > 0) pdf.addPage();
-
         pdf.addImage(dataUrl, 'PNG', 0, 0, 210, 297);
       }
 
-      // Restaurar estado
-      reportElement.style.display = 'none';
       pdf.save(`Estudio_Numerologico_${results.name.replace(/\s+/g, '_')}.pdf`);
+      console.log("PDF generado con éxito");
     } catch (err) {
-      console.error("Error generando PDF", err);
-      if (reportElement) reportElement.style.display = 'none';
+      console.error("Error detallado generando PDF:", err);
+    } finally {
+      // No ocultamos aquí si queremos re-intentar, pero el div padre en App.tsx lo mantiene oculto
     }
   };
 
