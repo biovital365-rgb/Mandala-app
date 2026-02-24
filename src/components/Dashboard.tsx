@@ -12,12 +12,12 @@ export function Dashboard({ results, onViewDetail, onGeneratePDF }: DashboardPro
     <div className="relative w-full max-w-md h-full min-h-screen bg-[#050505] flex flex-col shadow-2xl overflow-hidden mx-auto">
       <div className="flex items-center justify-between px-6 pt-12 pb-4 bg-black/40 backdrop-blur-md z-10 sticky top-0 border-b border-white/5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-magenta/10 flex items-center justify-center border border-magenta/20">
-            <Sparkles className="text-magenta w-5 h-5 shadow-[0_0_10px_rgba(219,39,119,0.5)]" />
+          <div className="w-10 h-10 rounded-full bg-magenta/10 flex items-center justify-center border border-magenta/20 overflow-hidden">
+            <img src="/logo.png" alt="Mandalapp" className="w-8 h-8 object-contain" />
           </div>
           <div>
-            <h1 className="text-white text-lg font-bold leading-tight">Mapa de {results.name.split(' ')[0]}</h1>
-            <p className="text-slate-400 text-xs font-medium uppercase tracking-widest opacity-70">Frecuencia Sagrada</p>
+            <h1 className="text-white text-lg font-bold leading-tight">Mandalapp</h1>
+            <p className="text-slate-400 text-xs font-medium uppercase tracking-widest opacity-70">Frecuencia de {results.name.split(' ')[0]}</p>
           </div>
         </div>
         <button className="w-10 h-10 flex items-center justify-center rounded-full bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white transition border border-white/5">
@@ -34,7 +34,7 @@ export function Dashboard({ results, onViewDetail, onGeneratePDF }: DashboardPro
             <div className="relative w-28 h-28 flex items-center justify-center">
               <div className="absolute inset-0 border-2 border-dashed border-magenta/30 rounded-full animate-[spin_30s_linear_infinite]"></div>
               <div className="absolute inset-4 border border-cyan/20 rounded-full animate-[spin_20s_linear_infinite_reverse]"></div>
-              <Infinity className="text-magenta w-12 h-12 drop-shadow-[0_0_15px_rgba(219,39,119,0.6)]" />
+              <img src="/logo.png" alt="Mandalapp" className="relative z-10 w-16 h-16 object-contain drop-shadow-[0_0_20px_rgba(219,39,119,0.5)]" />
             </div>
             <div>
               <h2 className="text-2xl font-bold text-white tracking-tight">Tu Mandala Vibracional</h2>

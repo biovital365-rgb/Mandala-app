@@ -68,7 +68,7 @@ export function Auth({ onAuthSuccess, onBack }: AuthProps) {
                     <div className="flex justify-center mb-6">
                         <div className="p-5 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-2xl shadow-2xl relative group overflow-hidden">
                             <div className="absolute inset-0 bg-gradient-to-tr from-magenta/20 to-cyan/20 animate-pulse"></div>
-                            <Sparkles className="w-12 h-12 text-gold relative z-10 drop-shadow-[0_0_15px_rgba(235,179,5,0.6)]" />
+                            <img src="/logo.png" alt="Mandalapp" className="w-12 h-12 relative z-10 drop-shadow-[0_0_15px_rgba(235,179,5,0.6)] object-contain" />
                         </div>
                     </div>
                     <h2 className="text-4xl font-black text-white tracking-tight leading-tight">

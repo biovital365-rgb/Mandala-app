@@ -5,13 +5,14 @@ import { Dashboard } from "./components/Dashboard";
 import { DetailView } from "./components/DetailView";
 import { Auth } from "./components/Auth";
 import { ReportTemplate } from "./components/ReportTemplate";
+import { BottomNav } from "./components/BottomNav";
 import { generateFullMap } from "./lib/numerology-engine";
 import { jsPDF } from "jspdf";
 import { toPng } from "html-to-image";
 import { supabase } from "./lib/supabase";
 
 export default function App() {
-  const [view, setView] = useState<"landing" | "onboarding" | "dashboard" | "detail" | "auth">("landing");
+  const [view, setView] = useState<"landing" | "onboarding" | "dashboard" | "detail" | "auth" | "history">("landing");
   const [results, setResults] = useState<any>(null);
   const [selectedPillar, setSelectedPillar] = useState<string>("");
   const [user, setUser] = useState<any>(null);
@@ -142,21 +143,32 @@ export default function App() {
       <div id="pdf-report-template" style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {results && <ReportTemplate results={results} />}
       </div>
-      {view === "landing" && <LandingPage onStart={handleStartOnboarding} onAuthClick={handleAuthClick} user={user} />}
-      {view === "auth" && <Auth onAuthSuccess={handleAuthSuccess} onBack={handleBackToLanding} />}
-      {view === "onboarding" && <Onboarding onComplete={handleCompleteOnboarding} onBack={handleBackToLanding} />}
-      {view === "dashboard" && results && (
-        <Dashboard
-          results={results}
-          onViewDetail={handleViewDetail}
-          onGeneratePDF={handleGeneratePDF}
-        />
-      )}
-      {view === "detail" && results && (
-        <DetailView
-          pillar={selectedPillar}
-          results={results}
-          onBack={handleBackToDashboard}
+
+      <main className="flex-1 w-full max-w-md relative pb-24">
+        {view === "landing" && <LandingPage onStart={handleStartOnboarding} onAuthClick={handleAuthClick} user={user} />}
+        {view === "auth" && <Auth onAuthSuccess={handleAuthSuccess} onBack={handleBackToLanding} />}
+        {view === "onboarding" && <Onboarding onComplete={handleCompleteOnboarding} onBack={handleBackToLanding} />}
+        {view === "dashboard" && results && (
+          <Dashboard
+            results={results}
+            onViewDetail={handleViewDetail}
+            onGeneratePDF={handleGeneratePDF}
+          />
+        )}
+        {view === "detail" && results && (
+          <DetailView
+            pillar={selectedPillar}
+            results={results}
+            onBack={handleBackToDashboard}
+          />
+        )}
+      </main>
+
+      {view !== "onboarding" && (
+        <BottomNav
+          currentView={view}
+          onNavigate={(newView) => setView(newView)}
+          hasResults={!!results}
         />
       )}
     </div>

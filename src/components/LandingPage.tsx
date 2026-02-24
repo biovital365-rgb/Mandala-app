@@ -19,11 +19,9 @@ export function LandingPage({ onStart, onAuthClick, user }: LandingPageProps) {
       {/* Header */}
       <header className="w-full z-50 bg-[#050505]/80 backdrop-blur-xl border-b border-white/5 sticky top-0">
         <div className="flex items-center justify-between px-6 py-4 w-full">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center border border-primary/20">
-              <Infinity className="text-primary w-5 h-5 gold-glow" />
-            </div>
-            <h2 className="text-white text-base font-bold tracking-tight">Mandala Numérico</h2>
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="Mandalapp" className="w-10 h-10 object-contain drop-shadow-[0_0_15px_rgba(235,179,5,0.4)]" />
+            <h2 className="text-white text-base font-bold tracking-tight">Mandalapp</h2>
           </div>
           {user ? (
             <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full">
