@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Sparkles, Lock, Star, Shield, Brain, User as UserIcon, Heart, Mountain, Badge, Calendar, Gift, Infinity, ChevronRight } from "lucide-react";
+import { Sparkles, Lock, Star, Shield, Brain, User as UserIcon, Heart, Mountain, Badge, Calendar, Gift, Infinity, ChevronRight, Zap } from "lucide-react";
 
 interface LandingPageProps {
   onStart: () => void;
