@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import { ChevronLeft, Share, Calculator, Sparkles, Zap, Gift, ChevronDown } from "lucide-react";
-import { getDetailedInterpretation } from "../lib/interpretations";
+import { getDetailedInterpretation, getCalculationSteps } from "../lib/interpretations";
 
 interface DetailViewProps {
   pillar: string;
@@ -38,7 +38,7 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
       challenges: interpretation.challenges,
       giftText: interpretation.gift,
       calc: results.dob ? new Date(results.dob).toLocaleDateString() : "--/--/----",
-      calcSteps: "Proceso Sagrado",
+      calcSteps: getCalculationSteps(pillar, results),
       color: pillar === 'mision' ? 'accent' : 'primary',
       icon: <Sparkles className="w-5 h-5" />
     };
@@ -119,14 +119,14 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#d946ef]/10 text-[#d946ef] border border-[#d946ef]/20 shadow-[0_0_15px_rgba(217,70,239,0.15)]">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">La Esencia</h3>
+                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">{data.title === "Esencia (Alma)" ? "Vibración de Esencia" : `Naturaleza de ${data.title}`}</h3>
               </div>
               <ChevronDown className="w-5 h-5 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:text-[#d946ef]" />
             </summary>
             <div className="px-5 pb-6 pt-1">
               <div className="w-full h-px bg-white/5 mb-4"></div>
               <p className="text-slate-300 text-sm leading-7 font-light">
-                Eres un alma introspectiva que busca respuestas más allá de lo superficial. Tu esencia vibra con la curiosidad filosófica y la necesidad de entender los misterios del universo. No te conformas con lo evidente; siempre estás excavando hacia la raíz de las cosas.
+                {data.essence}
               </p>
             </div>
           </details>
@@ -137,21 +137,19 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
                 <div className="flex items-center justify-center w-10 h-10 rounded-full bg-red-500/10 text-red-400 border border-red-500/20">
                   <Zap className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">Los Desafíos Kármicos</h3>
+                <h3 className="font-bold text-slate-100 tracking-wide text-[15px]">Desafíos del Número {data.number}</h3>
               </div>
               <ChevronDown className="w-5 h-5 text-slate-500 transition-transform duration-300 group-open:rotate-180 group-open:text-red-400" />
             </summary>
             <div className="px-5 pb-6 pt-1">
               <div className="w-full h-px bg-white/5 mb-4"></div>
               <ul className="space-y-4">
-                <li className="flex gap-3 text-sm text-slate-300 leading-relaxed">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] flex-shrink-0"></span>
-                  <span>Tendencia al aislamiento excesivo y a la soledad no constructiva.</span>
-                </li>
-                <li className="flex gap-3 text-sm text-slate-300 leading-relaxed">
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] flex-shrink-0"></span>
-                  <span>Perfeccionismo paralizante que impide compartir tus dones.</span>
-                </li>
+                {data.challenges.map((challenge: string, i: number) => (
+                  <li key={i} className="flex gap-3 text-sm text-slate-300 leading-relaxed">
+                    <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.6)] flex-shrink-0"></span>
+                    <span>{challenge}</span>
+                  </li>
+                ))}
               </ul>
             </div>
           </details>
@@ -170,10 +168,10 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
               <div className="w-full h-px bg-white/5 mb-4"></div>
               <div className="bg-gradient-to-r from-[#ffd700]/10 to-transparent p-4 rounded-lg border border-[#ffd700]/20 mb-4 shadow-[inset_0_0_20px_rgba(255,215,0,0.05)]">
                 <p className="text-[#ffd700] text-xs font-bold uppercase tracking-widest mb-1.5 opacity-90">Dones Desbloqueados</p>
-                <p className="text-white text-[15px] font-semibold tracking-wide">Intuición Profunda y Maestría</p>
+                <p className="text-white text-[15px] font-semibold tracking-wide">{data.giftText}</p>
               </div>
               <p className="text-slate-300 text-sm leading-7 font-light">
-                Al integrar tu sombra, accedes a una capacidad única para sanar a otros a través del conocimiento. Tu mente se convierte en un puente entre lo científico y lo espiritual.
+                Al integrar tu sombra, accedes a una capacidad única para manifestar tus talentos. Tu vibración se convierte en un puente entre tus ideales y la realidad física.
               </p>
             </div>
           </details>

@@ -158,6 +158,47 @@ const pillarNuances: Record<string, Record<number, string>> = {
   }
 };
 
+export function getCalculationSteps(pillar: string, results: any): string {
+  const dobParts = results.dob ? results.dob.split('-') : ['0', '0', '0'];
+  const day = dobParts[2];
+  const month = dobParts[1];
+  const year = dobParts[0];
+
+  switch (pillar) {
+    case 'esencia':
+      return `${day} = ${results.essence}`;
+    case 'mision':
+      const dSum = day.split('').reduce((a: number, b: string) => a + parseInt(b), 0);
+      const mSum = month.split('').reduce((a: number, b: string) => a + parseInt(b), 0);
+      const ySum = year.split('').reduce((a: number, b: string) => a + parseInt(b), 0);
+      return `(${dSum}) + (${mSum}) + (${ySum}) = ${results.lifePath}`;
+    case 'regalo':
+      const lastTwo = year.slice(-2);
+      return `${lastTwo} -> ${results.divineGift}`;
+    case 'ano':
+      const currentYear = new Date().getFullYear().toString();
+      const cySum = currentYear.split('').reduce((a: number, b: string) => a + parseInt(b), 0);
+      return `(${day}) + (${month}) + (${cySum}) = ${results.personalYear}`;
+    default:
+      return "Proceso Sagrado";
+  }
+}
+
+export function getMapSynthesis(results: any): string {
+  const e = results.essence;
+  const m = results.lifePath;
+
+  if (e === m) {
+    return `Tu Esencia y tu Misión vibran en la misma frecuencia (${e}). Esto indica un camino de gran coherencia interna, donde tus deseos más profundos están alineados naturalmente con tu propósito de vida. Tu desafío es no estancarte en la comodidad de lo conocido.`;
+  }
+
+  if ((e + m) % 2 === 0) {
+    return `Existe una armonía fluida entre quién eres (${e}) y hacia dónde vas (${m}). Tus herramientas internas facilitan el cumplimiento de tu destino. Es una combinación que favorece la estabilidad y el crecimiento sostenido.`;
+  }
+
+  return `Tu Esencia (${e}) y tu Misión (${m}) presentan naturalezas distintas, lo que genera una tensión creativa en tu vida. Esta dualidad te obliga a evolucionar constantemente, integrando tu mundo interno con las demandas externas de tu propósito. Eres un buscador de equilibrio.`;
+}
+
 export function getDetailedInterpretation(pillar: string, number: number) {
   const base = baseInterpretations[number] || baseInterpretations[1];
   const nuance = pillarNuances[pillar]?.[number] || "Tu vibración en este pilar es potente y equilibrada.";
