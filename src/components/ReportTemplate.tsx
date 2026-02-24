@@ -1,6 +1,6 @@
 import React from 'react';
 import { Sparkles, Heart, Mountain, Badge, Calendar, Gift, Infinity } from 'lucide-react';
-import { interpretations } from '../lib/interpretations';
+import { getDetailedInterpretation } from '../lib/interpretations';
 
 interface ReportTemplateProps {
     results: any;
@@ -8,7 +8,7 @@ interface ReportTemplateProps {
 
 export function ReportTemplate({ results }: ReportTemplateProps) {
     const getDesc = (pillar: string, num: number) => {
-        return interpretations.esencia[num]?.desc || interpretations.esencia[1].desc;
+        return getDetailedInterpretation(pillar, num).essence;
     };
 
     return (

@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { ChevronLeft, Share, Calculator, Sparkles, Zap, Gift, ChevronDown } from "lucide-react";
+import { getDetailedInterpretation } from "../lib/interpretations";
 
 interface DetailViewProps {
   pillar: string;
@@ -8,52 +9,45 @@ interface DetailViewProps {
 }
 
 export function DetailView({ pillar, results, onBack }: DetailViewProps) {
-  // Mock data based on the pillar
-  const getPillarData = () => {
-    switch (pillar) {
-      case 'esencia':
-        return {
-          title: "Esencia",
-          number: results.essence,
-          subtitle: "El Buscador de la Verdad",
-          desc: "Tu camino hacia la sabiduría interior y el análisis profundo.",
-          calc: "12 / 05 / 1990",
-          calcSteps: "36 → 9 + 7",
-          color: "primary",
-          icon: <Sparkles className="w-5 h-5" />
-        };
-      case 'mision':
-        return {
-          title: "Misión de Vida",
-          number: results.lifePath,
-          subtitle: "El Constructor",
-          desc: "Tu propósito en esta encarnación.",
-          calc: "12 / 05 / 1990",
-          calcSteps: "22",
-          color: "accent",
-          icon: <Sparkles className="w-5 h-5" />
-        };
-      // Add other cases as needed
-      default:
-        return {
-          title: "Misión de Vida",
-          number: "7",
-          subtitle: "El Buscador de la Verdad",
-          desc: "Tu camino hacia la sabiduría interior y el análisis profundo.",
-          calc: "12 / 05 / 1990",
-          calcSteps: "36 → 9 + 7",
-          color: "primary",
-          icon: <Sparkles className="w-5 h-5" />
-        };
-    }
-  };
+  const data = (() => {
+    const interpretation = getDetailedInterpretation(pillar, results[pillar === 'lifePath' ? 'mision' : pillar] || results.essence);
 
-  const data = getPillarData();
+    // Map internal results keys to pillar names
+    const numberMap: Record<string, any> = {
+      esencia: results.essence,
+      mision: results.lifePath,
+      nombre: results.nameVibration,
+      ano: results.personalYear,
+      regalo: results.divineGift
+    };
+
+    const titles: Record<string, string> = {
+      esencia: "Esencia (Alma)",
+      mision: "Misión de Vida",
+      nombre: "Vibración del Nombre",
+      ano: "Año Personal",
+      regalo: "Regalo Divino"
+    };
+
+    return {
+      title: titles[pillar] || "Análisis",
+      number: numberMap[pillar] || "?",
+      subtitle: interpretation.subtitle,
+      desc: interpretation.desc,
+      essence: interpretation.essence,
+      challenges: interpretation.challenges,
+      giftText: interpretation.gift,
+      calc: results.dob ? new Date(results.dob).toLocaleDateString() : "--/--/----",
+      calcSteps: "Proceso Sagrado",
+      color: pillar === 'mision' ? 'accent' : 'primary',
+      icon: <Sparkles className="w-5 h-5" />
+    };
+  })();
 
   return (
     <div className="relative flex min-h-screen w-full flex-col max-w-md mx-auto overflow-hidden bg-[#050214] shadow-2xl">
       <div className="absolute inset-0 bg-gradient-to-b from-[#090518] via-[#110a2e] to-[#050214] pointer-events-none z-0"></div>
-      
+
       {/* Background effects */}
       <div className="absolute top-[-10%] left-[-10%] right-[-10%] h-[600px] bg-[radial-gradient(circle_at_50%_40%,rgba(134,25,143,0.25),transparent_70%)] pointer-events-none z-0"></div>
       <div className="absolute -top-[50px] -right-[50px] w-[250px] h-[250px] bg-[#d946ef]/10 rounded-full blur-[80px] pointer-events-none z-0"></div>
@@ -98,7 +92,7 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
               </div>
               <h3 className="text-xs font-bold text-slate-300 uppercase tracking-widest">Cálculo de Nacimiento</h3>
             </div>
-            
+
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center text-sm text-slate-400">
                 <span className="font-medium">Fecha</span>
@@ -191,7 +185,7 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
           <Share className="w-5 h-5" />
           Compartir Interpretación
         </button>
-        <button 
+        <button
           onClick={onBack}
           className="w-full py-2 text-sm text-slate-400 font-medium hover:text-white transition-colors tracking-wide"
         >
