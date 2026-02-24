@@ -12,7 +12,7 @@ export function ReportTemplate({ results }: ReportTemplateProps) {
     };
 
     return (
-        <div id="pdf-report-template" className="bg-[#050505] text-white p-12 w-[800px] font-sans">
+        <div className="bg-black text-white p-12 w-[800px] font-sans min-h-[1100px] flex flex-col">
             <div className="flex items-center justify-between mb-12 border-b border-white/10 pb-8">
                 <div className="flex items-center gap-3">
                     <Sparkles className="text-[#7f13ec] w-10 h-10" />

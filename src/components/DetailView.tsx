@@ -10,9 +10,6 @@ interface DetailViewProps {
 
 export function DetailView({ pillar, results, onBack }: DetailViewProps) {
   const data = (() => {
-    const interpretation = getDetailedInterpretation(pillar, results[pillar === 'lifePath' ? 'mision' : pillar] || results.essence);
-
-    // Map internal results keys to pillar names
     const numberMap: Record<string, any> = {
       esencia: results.essence,
       mision: results.lifePath,
@@ -20,6 +17,9 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
       ano: results.personalYear,
       regalo: results.divineGift
     };
+
+    const pillarNum = numberMap[pillar] || results.essence;
+    const interpretation = getDetailedInterpretation(pillar, pillarNum);
 
     const titles: Record<string, string> = {
       esencia: "Esencia (Alma)",

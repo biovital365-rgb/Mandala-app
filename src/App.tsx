@@ -89,13 +89,29 @@ export default function App() {
 
   const handleGeneratePDF = async () => {
     const element = document.getElementById('pdf-report-template');
-    if (!element) return;
+    if (!element || !results) return;
 
     try {
-      // Temporalmente mostrar el template para capturarlo si estuviera oculto
+      // Asegurar visibilidad para la captura
+      element.style.position = 'fixed';
+      element.style.top = '0';
+      element.style.left = '0';
+      element.style.zIndex = '-1';
       element.style.display = 'block';
-      const dataUrl = await toPng(element, { quality: 0.95 });
+
+      // Pequeño delay para asegurar renderizado de iconos/fuentes
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const dataUrl = await toPng(element, {
+        quality: 1,
+        pixelRatio: 2, // Mejor resolución
+        backgroundColor: '#050505' // Asegurar fondo sólido
+      });
+
+      // Restaurar estado oculto
       element.style.display = 'none';
+      element.style.position = 'absolute';
+      element.style.top = '-10000px';
 
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgProps = pdf.getImageProperties(dataUrl);
@@ -106,6 +122,12 @@ export default function App() {
       pdf.save(`Mandala_${results.name.replace(/\s+/g, '_')}.pdf`);
     } catch (err) {
       console.error("Error generando PDF", err);
+      // Asegurar que se oculte si hay error
+      if (element) {
+        element.style.display = 'none';
+        element.style.position = 'absolute';
+        element.style.top = '-10000px';
+      }
     }
   };
 
