@@ -138,7 +138,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center overflow-hidden relative">
+    <div className="min-h-screen bg-[#050505] text-white flex flex-col items-center justify-center overflow-hidden relative">
       <div id="pdf-report-template" style={{ position: 'absolute', top: '-10000px', left: '-10000px' }}>
         {results && <ReportTemplate results={results} />}
       </div>
