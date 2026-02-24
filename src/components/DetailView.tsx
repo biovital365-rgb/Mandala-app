@@ -21,6 +21,13 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
     const pillarNum = numberMap[pillar] || results.essence;
     const interpretation = getDetailedInterpretation(pillar, pillarNum);
 
+    // Fix para evitar desfase de zona horaria en la visualización
+    const formatDate = (dateStr: string) => {
+      if (!dateStr) return "--/--/----";
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return `${d}/${m}/${y}`;
+    };
+
     const titles: Record<string, string> = {
       esencia: "Esencia (Alma)",
       mision: "Misión de Vida",
@@ -34,10 +41,11 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
       number: numberMap[pillar] || "?",
       subtitle: interpretation.subtitle,
       desc: interpretation.desc,
-      essence: interpretation.essence,
+      essence: interpretation.essence, // El texto largo de 100+ palabras
+      pillarNuance: interpretation.pillarNuance, // El matiz corto del pilar
       challenges: interpretation.challenges,
       giftText: interpretation.gift,
-      calc: results.dob ? new Date(results.dob).toLocaleDateString() : "--/--/----",
+      calc: results.dob ? formatDate(results.dob) : "--/--/----",
       calcSteps: getCalculationSteps(pillar, results),
       color: pillar === 'mision' ? 'accent' : 'primary',
       icon: <Sparkles className="w-5 h-5" />
@@ -125,9 +133,14 @@ export function DetailView({ pillar, results, onBack }: DetailViewProps) {
             </summary>
             <div className="px-5 pb-6 pt-1">
               <div className="w-full h-px bg-white/5 mb-4"></div>
-              <p className="text-slate-300 text-sm leading-7 font-light">
-                {data.essence}
-              </p>
+              <div className="space-y-4 text-slate-300 text-sm leading-7 font-light">
+                <p className="border-l-2 border-[#d946ef]/40 pl-4 py-1 bg-white/5 rounded-r-lg">
+                  {data.pillarNuance}
+                </p>
+                <p>
+                  {data.essence}
+                </p>
+              </div>
             </div>
           </details>
 

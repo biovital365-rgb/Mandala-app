@@ -43,7 +43,11 @@ export default function App() {
   };
 
   const handleCompleteOnboarding = async (data: { dob: string; name: string }) => {
-    const mapResult = generateFullMap(data.name, new Date(data.dob));
+    // Asegurar que la fecha se trate como local sin desplazamiento de zona horaria
+    const [year, month, day] = data.dob.split('-').map(Number);
+    const dateObj = new Date(year, month - 1, day, 12, 0, 0); // Al medio día para robustez
+
+    const mapResult = generateFullMap(data.name, dateObj);
     const processedResults = {
       name: data.name,
       dob: data.dob,
@@ -88,46 +92,42 @@ export default function App() {
   };
 
   const handleGeneratePDF = async () => {
-    const element = document.getElementById('pdf-report-template');
-    if (!element || !results) return;
+    const reportElement = document.getElementById('pdf-report-template');
+    if (!reportElement || !results) return;
 
     try {
-      // Asegurar visibilidad para la captura
-      element.style.position = 'fixed';
-      element.style.top = '0';
-      element.style.left = '0';
-      element.style.zIndex = '-1';
-      element.style.display = 'block';
-
-      // Pequeño delay para asegurar renderizado de iconos/fuentes
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      const dataUrl = await toPng(element, {
-        quality: 1,
-        pixelRatio: 2, // Mejor resolución
-        backgroundColor: '#050505' // Asegurar fondo sólido
-      });
-
-      // Restaurar estado oculto
-      element.style.display = 'none';
-      element.style.position = 'absolute';
-      element.style.top = '-10000px';
+      // Mostrar temporalmente para la captura
+      reportElement.style.display = 'block';
+      reportElement.style.position = 'fixed';
+      reportElement.style.left = '-10000px';
 
       const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgProps = pdf.getImageProperties(dataUrl);
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      const pageIds = ['pdf-page-cover', 'pdf-page-esencia', 'pdf-page-mision', 'pdf-page-nombre', 'pdf-page-ano', 'pdf-page-regalo', 'pdf-page-synthesis'];
 
-      pdf.addImage(dataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Mandala_${results.name.replace(/\s+/g, '_')}.pdf`);
+      for (let i = 0; i < pageIds.length; i++) {
+        const pageElement = document.getElementById(pageIds[i]);
+        if (!pageElement) continue;
+
+        // Pequeño delay por cada página para asegurar renderizado
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        const dataUrl = await toPng(pageElement, {
+          quality: 1,
+          pixelRatio: 2,
+          backgroundColor: '#050505'
+        });
+
+        if (i > 0) pdf.addPage();
+
+        pdf.addImage(dataUrl, 'PNG', 0, 0, 210, 297);
+      }
+
+      // Restaurar estado
+      reportElement.style.display = 'none';
+      pdf.save(`Estudio_Numerologico_${results.name.replace(/\s+/g, '_')}.pdf`);
     } catch (err) {
       console.error("Error generando PDF", err);
-      // Asegurar que se oculte si hay error
-      if (element) {
-        element.style.display = 'none';
-        element.style.position = 'absolute';
-        element.style.top = '-10000px';
-      }
+      if (reportElement) reportElement.style.display = 'none';
     }
   };
 
